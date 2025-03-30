@@ -56,14 +56,18 @@ public class App {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
-                wordleDatabaseConnection.addValidWord(i, line);
-                i++;
+               if (line.length() !=4) {
+                logger.log(Level.SEVERE, "Invalid word in data.txt file: " + line);
+               } else {
+                    logger.log(Level.INFO, "Valid word: " + line);
+                    wordleDatabaseConnection.addValidWord((i), line);
+                    i++;
+               }
             }
 
         } catch (IOException e) {
-            System.out.println("Not able to load . Sorry!");
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Failed to load words from data.txt file", e);
+            System.out.println("cannot load words");
             return;
         }
 
@@ -80,13 +84,14 @@ public class App {
                     System.out.println("Success! It is in the the list.\n");
                 }else{
                     System.out.println("Sorry. This word is NOT in the the list.\n");
+                    logger.log(Level.WARNING, "Invalid guess: " + guess);
                 }
 
                 System.out.print("Enter a 4 letter word for a guess or q to quit: " );
                 guess = scanner.nextLine();
             }
         } catch (NoSuchElementException | IllegalStateException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Scanner error occurred.", e);
         }
 
     }
